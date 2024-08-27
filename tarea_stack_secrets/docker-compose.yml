@@ -6,16 +6,18 @@
 services:
 
   drupal:
-    image: custom-drupal
+    image: drupal:8.2
     secrets:
       - psql-pw
     ports:
-      - "8080:80"
+      - "8081:80"
     volumes:
       - drupal-modules:/var/www/html/modules
       - drupal-profiles:/var/www/html/profiles       
       - drupal-sites:/var/www/html/sites      
       - drupal-themes:/var/www/html/themes
+    environment:
+      POSTGRES_PASSWORD_FILE: /run/secrets/psql-pw
  
   postgres:
     image: postgres:14
@@ -33,5 +35,4 @@ volumes:
 
 secrets:
   psql-pw:
-    environment:
-      - POSTGRES_PASSWORD_FILE=/run/secrets/psql-pw
+    external: true
